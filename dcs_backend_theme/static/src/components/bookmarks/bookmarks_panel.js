@@ -1,4 +1,4 @@
-import { Component, proxy } from "@odoo/owl";
+import { Component, useState } from "@odoo/owl";
 import { _t } from "@web/core/l10n/translation";
 import { useService } from "@web/core/utils/hooks";
 import { AppIcon } from "../app_icon/app_icon";
@@ -8,12 +8,13 @@ import { usePanel } from "../../core/use_panel";
 export class BookmarksPanel extends Component {
     static template = "dcs_backend_theme.BookmarksPanel";
     static components = { AppIcon };
+    static props = {};
 
     setup() {
         this.themeService = useService("cbt_theme");
         this.nav = useService("cbt_nav");
-        this.data = proxy(this.themeService.data);
-        this.state = proxy({ editingId: null, draft: "", announce: "" });
+        this.data = useState(this.themeService.data);
+        this.state = useState({ editingId: null, draft: "", announce: "" });
         this.rootRef = usePanel("root", () => this.close());
         // Snapshot when the panel opens (the action stack does not change while it is open).
         this.current = this.nav.describeCurrentPage();

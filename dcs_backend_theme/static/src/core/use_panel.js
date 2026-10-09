@@ -1,5 +1,5 @@
-import { onMounted, onWillUnmount, signal } from "@odoo/owl";
-import { getFirstAndLastTabableElements } from "@web/core/ui/ui_utils";
+import { onMounted, onWillUnmount, useRef } from "@odoo/owl";
+import { getFirstAndLastTabableElements } from "@web/core/ui/ui_service";
 
 /**
  * Accessibility plumbing shared by the theme overlays:
@@ -8,12 +8,8 @@ import { getFirstAndLastTabableElements } from "@web/core/ui/ui_utils";
  * - closes on Escape
  * - restores focus to the opener when the panel goes away
  */
-/**
- * @param {string} _refName kept for API symmetry; OWL 3 refs are signals
- *   (`t-ref="this.rootRef"` in the template).
- */
-export function usePanel(_refName, onClose) {
-    const ref = signal.ref();
+export function usePanel(refName, onClose) {
+    const ref = useRef(refName);
     let opener = null;
 
     function onKeydown(ev) {
@@ -23,10 +19,10 @@ export function usePanel(_refName, onClose) {
             onClose();
             return;
         }
-        if (ev.key !== "Tab" || !ref()) {
+        if (ev.key !== "Tab" || !ref.el) {
             return;
         }
-        const [first, last] = getFirstAndLastTabableElements(ref());
+        const [first, last] = getFirstAndLastTabableElements(ref.el);
         if (!first) {
             return;
         }
@@ -41,7 +37,7 @@ export function usePanel(_refName, onClose) {
 
     onMounted(() => {
         opener = document.activeElement;
-        const el = ref();
+        const el = ref.el;
         if (!el) {
             return;
         }
@@ -50,7 +46,7 @@ export function usePanel(_refName, onClose) {
         target?.focus();
     });
     onWillUnmount(() => {
-        ref()?.removeEventListener("keydown", onKeydown);
+        ref.el?.removeEventListener("keydown", onKeydown);
         if (opener && document.contains(opener) && typeof opener.focus === "function") {
             opener.focus();
         }

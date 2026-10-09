@@ -1,7 +1,6 @@
-import { Component, proxy, t, useProps } from "@odoo/owl";
-import { useSubEnv } from "@web/owl2/utils";
+import { Component, useState, useSubEnv } from "@odoo/owl";
 import { _t } from "@web/core/l10n/translation";
-import { SIZES } from "@web/core/ui/ui_utils";
+import { SIZES } from "@web/core/ui/ui_service";
 import { useService } from "@web/core/utils/hooks";
 import { patch } from "@web/core/utils/patch";
 import { CallbackRecorder, useSetupAction } from "@web/search/action_hook";
@@ -18,17 +17,17 @@ import { getDefaultConfig, View } from "@web/views/view";
 export class SplitFormPane extends Component {
     static template = "dcs_backend_theme.SplitFormPane";
     static components = { View };
-    props = useProps({
-        resModel: t.string(),
-        resId: t.number(),
-        resIds: t.array(),
-        formViewId: t.or([t.number(), t.boolean()]).optional(false),
-        context: t.object(),
-        actionId: t.or([t.number(), t.boolean()]).optional(false),
-        recorder: t.any(), // CallbackRecorder
-        onClose: t.function(),
-        onExpand: t.function(),
-    });
+    static props = {
+        resModel: String,
+        resId: Number,
+        resIds: Array,
+        formViewId: { type: [Number, Boolean], optional: true },
+        context: Object,
+        actionId: { type: [Number, Boolean], optional: true },
+        recorder: CallbackRecorder,
+        onClose: Function,
+        onExpand: Function,
+    };
 
     setup() {
         const config = { ...getDefaultConfig() };
@@ -67,10 +66,11 @@ export class SplitFormPane extends Component {
 export class SplitPaneHost extends Component {
     static template = "dcs_backend_theme.SplitPaneHost";
     static components = { SplitFormPane };
+    static props = {};
 
     setup() {
         this.host = this.env.cbtSplitHost;
-        this.split = proxy(this.env.cbtSplit);
+        this.split = useState(this.env.cbtSplit);
         this.host.cbtSplitFlags.supported = true;
     }
 }
@@ -79,9 +79,9 @@ patch(ListController.prototype, {
     setup() {
         super.setup(...arguments);
         this.cbtTheme = useService("cbt_theme");
-        this.cbtPrefs = proxy(this.cbtTheme.prefs);
+        this.cbtPrefs = useState(this.cbtTheme.prefs);
         this.cbtUi = useService("ui");
-        this.cbtSplit = proxy({ resId: null, resIds: [], recorder: new CallbackRecorder() });
+        this.cbtSplit = useState({ resId: null, resIds: [], recorder: new CallbackRecorder() });
         // Set by SplitPaneHost once it is mounted in this list's Layout; a
         // list whose controller renders without web.Layout keeps the
         // standard behavior.
@@ -178,7 +178,7 @@ patch(ListController.prototype, {
 patch(ListRenderer.prototype, {
     setup() {
         super.setup(...arguments);
-        this.cbtSplit = this.env.cbtSplit ? proxy(this.env.cbtSplit) : null;
+        this.cbtSplit = this.env.cbtSplit ? useState(this.env.cbtSplit) : null;
     },
     getRowClass(record) {
         const classes = super.getRowClass(record);

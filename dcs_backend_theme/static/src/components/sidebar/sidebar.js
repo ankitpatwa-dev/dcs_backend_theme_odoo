@@ -1,5 +1,4 @@
-import { Component, onWillUnmount, proxy, signal } from "@odoo/owl";
-import { render, useLayoutEffect } from "@web/owl2/utils";
+import { Component, onWillUnmount, useEffect, useRef, useState } from "@odoo/owl";
 import { localization } from "@web/core/l10n/localization";
 import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
@@ -17,18 +16,19 @@ const PEEK_DELAY = 160;
 export class Sidebar extends Component {
     static template = "dcs_backend_theme.Sidebar";
     static components = { AppIcon };
+    static props = {};
 
     setup() {
         this.themeService = useService("cbt_theme");
         this.nav = useService("cbt_nav");
         this.menuService = useService("menu");
-        this.prefs = proxy(this.themeService.prefs);
-        this.themeUi = proxy(this.themeService.ui);
-        this.data = proxy(this.themeService.data);
-        this.navState = proxy(this.nav.state);
-        this.ui = proxy(useService("ui"));
-        this.rootRef = signal.ref();
-        this.state = proxy({
+        this.prefs = useState(this.themeService.prefs);
+        this.themeUi = useState(this.themeService.ui);
+        this.data = useState(this.themeService.data);
+        this.navState = useState(this.nav.state);
+        this.ui = useState(useService("ui"));
+        this.rootRef = useRef("root");
+        this.state = useState({
             query: "",
             expandedAppId: this.nav.getCurrentApp()?.id || null,
             openSections: {},
@@ -40,11 +40,11 @@ export class Sidebar extends Component {
             if (app) {
                 this.state.expandedAppId = app.id;
             }
-            render(this);
+            this.render();
         });
 
         // Expose "a sidebar occupies space" to the layout SCSS.
-        useLayoutEffect(
+        useEffect(
             (visible) => {
                 const root = document.documentElement;
                 root.toggleAttribute("data-cbt-has-sidebar", visible);
@@ -54,7 +54,7 @@ export class Sidebar extends Component {
         );
 
         // Auto-open the sections containing the active menu.
-        useLayoutEffect(
+        useEffect(
             (currentMenuId) => {
                 if (!currentMenuId) {
                     return;
@@ -244,7 +244,7 @@ export class Sidebar extends Component {
 
     onMouseLeave() {
         clearTimeout(this.peekTimer);
-        if (this.rootRef()?.contains(document.activeElement) && this.state.query) {
+        if (this.rootRef.el?.contains(document.activeElement) && this.state.query) {
             return;
         }
         this.themeUi.sidebarPeek = false;
@@ -256,14 +256,14 @@ export class Sidebar extends Component {
     }
 
     onFocusOut(ev) {
-        if (!this.rootRef()?.contains(ev.relatedTarget)) {
+        if (!this.rootRef.el?.contains(ev.relatedTarget)) {
             this.endPeek();
         }
     }
 
     /** Roving keyboard navigation over visible items. */
     onKeydown(ev) {
-        const items = [...this.rootRef().querySelectorAll(".cbt-sidebar__item:not([disabled])")].filter(
+        const items = [...this.rootRef.el.querySelectorAll(".cbt-sidebar__item:not([disabled])")].filter(
             (el) => el.offsetParent !== null
         );
         const index = items.indexOf(document.activeElement);
@@ -332,6 +332,7 @@ registry.category("main_components").add("cbt.Sidebar", {
     Component: class SidebarHost extends Component {
         static template = "dcs_backend_theme.SidebarHost";
         static components = { Sidebar };
+        static props = {};
         get enabled() {
             return Boolean(this.env.cbtInWebClient && this.env.services.cbt_nav);
         }

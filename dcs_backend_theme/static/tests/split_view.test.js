@@ -1,6 +1,5 @@
 import { defineMailModels } from "@mail/../tests/mail_test_helpers";
 import { describe, expect, test } from "@odoo/hoot";
-import { resize } from "@odoo/hoot-dom";
 import { animationFrame } from "@odoo/hoot-mock";
 import {
     contains,
@@ -11,6 +10,7 @@ import {
     mountWithCleanup,
 } from "@web/../tests/web_test_helpers";
 import { registry } from "@web/core/registry";
+import { SIZES } from "@web/core/ui/ui_service";
 import { listView } from "@web/views/list/list_view";
 import { ListController } from "@web/views/list/list_controller";
 import { WebClient } from "@web/webclient/webclient";
@@ -47,10 +47,8 @@ async function openPartners(jsClass) {
         form: `<form><field name="name"/></form>`,
         search: `<search/>`,
     };
-    // Odoo 20: the UI size comes from media queries (UI plugin), so the
-    // mocked window is made wide enough for the split view (XL+).
-    await resize({ width: 1600, height: 900 });
     await mountWithCleanup(WebClient);
+    getService("ui").size = SIZES.XXL;
     await getService("cbt_theme").setPrefs({ cbt_split_view: true });
     await getService("action").doAction({
         type: "ir.actions.act_window",

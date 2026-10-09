@@ -1,4 +1,4 @@
-import { Component, proxy } from "@odoo/owl";
+import { Component, useState } from "@odoo/owl";
 import { _t } from "@web/core/l10n/translation";
 import { useService } from "@web/core/utils/hooks";
 import { fuzzyLookup } from "@web/core/utils/search";
@@ -10,13 +10,14 @@ import { usePanel } from "../../core/use_panel";
 export class AppDrawer extends Component {
     static template = "dcs_backend_theme.AppDrawer";
     static components = { AppIcon };
+    static props = {};
 
     setup() {
         this.themeService = useService("cbt_theme");
         this.nav = useService("cbt_nav");
-        this.prefs = proxy(this.themeService.prefs);
-        this.data = proxy(this.themeService.data);
-        this.state = proxy({ query: "", activeIndex: 0 });
+        this.prefs = useState(this.themeService.prefs);
+        this.data = useState(this.themeService.data);
+        this.state = useState({ query: "", activeIndex: 0 });
         this.rootRef = usePanel("root", () => this.close());
     }
 
@@ -113,8 +114,7 @@ export class AppDrawer extends Component {
         this.themeService.setPref("cbt_drawer_style", style);
     }
 
-    onInput(ev) {
-        this.state.query = ev.target.value;
+    onInput() {
         this.state.activeIndex = 0;
     }
 
@@ -124,10 +124,10 @@ export class AppDrawer extends Component {
         if (!list.length) {
             return;
         }
-        const tiles = [...this.rootRef().querySelectorAll("[data-cbt-drawer-index]")];
+        const tiles = [...this.rootRef.el.querySelectorAll("[data-cbt-drawer-index]")];
         const columns = this.countColumns(tiles);
         let index = this.state.activeIndex;
-        const rtl = getComputedStyle(this.rootRef()).direction === "rtl";
+        const rtl = getComputedStyle(this.rootRef.el).direction === "rtl";
         switch (ev.key) {
             case "ArrowRight":
                 index += rtl ? -1 : 1;

@@ -9,6 +9,7 @@ import { ThemeSettings } from "./theme_settings";
 export class ThemePanel extends Component {
     static template = "dcs_backend_theme.ThemePanel";
     static components = { ThemeSettings };
+    static props = {};
 
     setup() {
         this.themeService = useService("cbt_theme");

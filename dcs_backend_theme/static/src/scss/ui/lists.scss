@@ -98,16 +98,6 @@
     > .o_content { grid-column: 1; grid-row: 2; min-inline-size: 0; min-block-size: 0; }
     > .cbt-split-pane { grid-column: 2; grid-row: 2; min-block-size: 0; }
 }
-// Wide app dashboards above the list (e.g. Purchase) scroll sideways
-// instead of being clipped by the narrower list column.
-.o_view_controller.cbt-split-active > .o_content { overflow-x: auto; }
-// Bootstrap's col-lg-* follow the *window* width; inside the pane the form
-// is narrow, so every group goes full width (labels and values get room).
-.cbt-split-pane .o_form_view .o_group.row > [class*="col-lg-"] {
-    flex: 0 0 100%;
-    max-inline-size: 100%;
-    inline-size: 100%;
-}
 .cbt-split-pane {
     display: flex;
     flex-direction: column;

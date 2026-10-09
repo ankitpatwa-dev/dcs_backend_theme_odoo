@@ -4,168 +4,192 @@
     <!-- Segmented radio group: native radios keep arrow-key navigation. -->
     <t t-name="dcs_backend_theme.ThemeSettings.Segmented">
         <div class="cbt-seg" role="radiogroup" t-att-aria-label="label">
-            <t t-foreach="this.choices[field]" t-as="choice" t-key="choice.value">
-                <t t-set="inputId" t-value="this.uid + '_' + field + '_' + choice.value"/>
-                <input type="radio" class="cbt-seg__input" t-att-id="inputId" t-att-name="this.uid + '_' + field"
-                       t-att-checked="this.prefs[field] === choice.value"
+            <t t-foreach="choices[field]" t-as="choice" t-key="choice.value">
+                <t t-set="inputId" t-value="uid + '_' + field + '_' + choice.value"/>
+                <input type="radio" class="cbt-seg__input" t-att-id="inputId" t-att-name="uid + '_' + field"
+                       t-att-checked="prefs[field] === choice.value"
                        t-on-change="() => this.set(field, choice.value)"/>
                 <label class="cbt-seg__option" t-att-for="inputId">
-                    <i t-if="choice.icon" class="oi" t-att-data-icon="choice.icon" aria-hidden="true"/>
-                    <span t-out="choice.label"/>
+                    <i t-if="choice.icon" t-attf-class="fa {{ choice.icon }}" aria-hidden="true"/>
+                    <span t-esc="choice.label"/>
                 </label>
             </t>
         </div>
     </t>
 
     <t t-name="dcs_backend_theme.ThemeSettings">
-        <div class="cbt-settings" t-att-class="{ 'cbt-settings--compact': this.props.compact }">
+        <div class="cbt-settings" t-att-class="{ 'cbt-settings--compact': props.compact }">
 
             <section class="cbt-settings__group">
-                <h3 class="cbt-settings__title" t-out="this.labels.appearance"/>
+                <h3 class="cbt-settings__title" t-esc="labels.appearance"/>
 
                 <div class="cbt-settings__row">
-                    <div class="cbt-settings__label" t-out="this.labels.mode"/>
-                    <t t-call="dcs_backend_theme.ThemeSettings.Segmented" field="'cbt_theme_mode'" label="this.labels.mode"/>
-                    <p class="cbt-settings__help" t-out="this.labels.modeHelp"/>
+                    <div class="cbt-settings__label" t-esc="labels.mode"/>
+                    <t t-call="dcs_backend_theme.ThemeSettings.Segmented">
+                        <t t-set="field" t-value="'cbt_theme_mode'"/>
+                        <t t-set="label" t-value="labels.mode"/>
+                    </t>
+                    <p class="cbt-settings__help" t-esc="labels.modeHelp"/>
                 </div>
 
                 <div class="cbt-settings__row">
-                    <div class="cbt-settings__label" t-out="this.labels.color"/>
-                    <div class="cbt-swatches" role="radiogroup" t-att-aria-label="this.labels.color">
-                        <t t-foreach="this.palettes" t-as="palette" t-key="palette.id">
+                    <div class="cbt-settings__label" t-esc="labels.color"/>
+                    <div class="cbt-swatches" role="radiogroup" t-att-aria-label="labels.color">
+                        <t t-foreach="palettes" t-as="palette" t-key="palette.id">
                             <button type="button" class="cbt-swatch" role="radio"
-                                    t-att-aria-checked="this.prefs.cbt_palette === palette.id ? 'true' : 'false'"
+                                    t-att-aria-checked="prefs.cbt_palette === palette.id ? 'true' : 'false'"
                                     t-att-aria-label="palette.label" t-att-title="palette.label"
                                     t-attf-style="--cbt-swatch: {{ palette.color }};"
                                     t-on-click="() => this.setPalette(palette.id)">
-                                <i t-if="this.prefs.cbt_palette === palette.id" class="oi" data-icon="check" aria-hidden="true"/>
+                                <i t-if="prefs.cbt_palette === palette.id" class="fa fa-check" aria-hidden="true"/>
                             </button>
                         </t>
-                        <label class="cbt-swatch cbt-swatch--custom" t-att-title="this.labels.custom"
-                               t-att-class="{ 'cbt-swatch--on': this.prefs.cbt_palette === 'custom' }"
-                               t-attf-style="--cbt-swatch: {{ this.prefs.cbt_primary_color }};">
-                            <input type="color" class="cbt-swatch__picker" t-att-value="this.prefs.cbt_primary_color"
-                                   t-att-aria-label="this.labels.custom" t-on-input="this.onColorInput"/>
-                            <i class="oi" data-icon="colorize" aria-hidden="true"/>
+                        <label class="cbt-swatch cbt-swatch--custom" t-att-title="labels.custom"
+                               t-att-class="{ 'cbt-swatch--on': prefs.cbt_palette === 'custom' }"
+                               t-attf-style="--cbt-swatch: {{ prefs.cbt_primary_color }};">
+                            <input type="color" class="cbt-swatch__picker" t-att-value="prefs.cbt_primary_color"
+                                   t-att-aria-label="labels.custom" t-on-input="onColorInput"/>
+                            <i class="fa fa-eyedropper" aria-hidden="true"/>
                         </label>
                     </div>
-                    <div class="cbt-hex" t-if="this.prefs.cbt_palette === 'custom'">
-                        <label class="cbt-settings__help m-0" t-att-for="this.uid + '_hex'" t-out="this.labels.hex"/>
-                        <input class="form-control form-control-sm" t-att-id="this.uid + '_hex'" t-att-value="this.state.hex"
-                               maxlength="7" spellcheck="false" t-on-change="this.onHexChange"/>
+                    <div class="cbt-hex" t-if="prefs.cbt_palette === 'custom'">
+                        <label class="cbt-settings__help m-0" t-att-for="uid + '_hex'" t-esc="labels.hex"/>
+                        <input class="form-control form-control-sm" t-att-id="uid + '_hex'" t-att-value="state.hex"
+                               maxlength="7" spellcheck="false" t-on-change="onHexChange"/>
                     </div>
                 </div>
             </section>
 
             <section class="cbt-settings__group">
-                <h3 class="cbt-settings__title" t-out="this.labels.navigation"/>
+                <h3 class="cbt-settings__title" t-esc="labels.navigation"/>
                 <div class="cbt-settings__row">
-                    <div class="cbt-settings__label" t-out="this.labels.navMode"/>
-                    <div class="cbt-navcards" role="radiogroup" t-att-aria-label="this.labels.navMode">
-                        <t t-foreach="this.choices.cbt_nav_mode" t-as="choice" t-key="choice.value">
-                            <t t-set="inputId" t-value="this.uid + '_nav_' + choice.value"/>
-                            <input type="radio" class="cbt-seg__input" t-att-id="inputId" t-att-name="this.uid + '_nav'"
-                                   t-att-checked="this.prefs.cbt_nav_mode === choice.value"
+                    <div class="cbt-settings__label" t-esc="labels.navMode"/>
+                    <div class="cbt-navcards" role="radiogroup" t-att-aria-label="labels.navMode">
+                        <t t-foreach="choices.cbt_nav_mode" t-as="choice" t-key="choice.value">
+                            <t t-set="inputId" t-value="uid + '_nav_' + choice.value"/>
+                            <input type="radio" class="cbt-seg__input" t-att-id="inputId" t-att-name="uid + '_nav'"
+                                   t-att-checked="prefs.cbt_nav_mode === choice.value"
                                    t-on-change="() => this.set('cbt_nav_mode', choice.value)"/>
                             <label class="cbt-navcard" t-att-for="inputId">
                                 <span t-attf-class="cbt-navcard__preview cbt-navcard__preview--{{ choice.value }}" aria-hidden="true">
                                     <i class="cbt-navcard__bar"/><i class="cbt-navcard__side"/><i class="cbt-navcard__content"/>
                                 </span>
-                                <span t-out="choice.label"/>
+                                <span t-esc="choice.label"/>
                             </label>
                         </t>
                     </div>
                 </div>
-                <t t-if="this.prefs.cbt_nav_mode === 'vertical'">
+                <t t-if="prefs.cbt_nav_mode === 'vertical'">
                     <div class="cbt-settings__row">
-                        <div class="cbt-settings__label" t-out="this.labels.sidebar"/>
-                        <t t-call="dcs_backend_theme.ThemeSettings.Segmented" field="'cbt_sidebar_mode'" label="this.labels.sidebar"/>
+                        <div class="cbt-settings__label" t-esc="labels.sidebar"/>
+                        <t t-call="dcs_backend_theme.ThemeSettings.Segmented">
+                            <t t-set="field" t-value="'cbt_sidebar_mode'"/>
+                            <t t-set="label" t-value="labels.sidebar"/>
+                        </t>
                     </div>
-                    <div class="cbt-settings__row" t-if="this.prefs.cbt_sidebar_mode !== 'expanded'">
+                    <div class="cbt-settings__row" t-if="prefs.cbt_sidebar_mode !== 'expanded'">
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" t-att-id="this.uid + '_lock'"
-                                   t-att-checked="this.prefs.cbt_sidebar_locked"
+                            <input class="form-check-input" type="checkbox" role="switch" t-att-id="uid + '_lock'"
+                                   t-att-checked="prefs.cbt_sidebar_locked"
                                    t-on-change="(ev) => this.set('cbt_sidebar_locked', ev.target.checked)"/>
-                            <label class="form-check-label" t-att-for="this.uid + '_lock'" t-out="this.labels.sidebarLock"/>
+                            <label class="form-check-label" t-att-for="uid + '_lock'" t-esc="labels.sidebarLock"/>
                         </div>
                     </div>
                 </t>
-                <t t-if="this.prefs.cbt_nav_mode === 'vertical' or this.prefs.cbt_nav_mode === 'compact'">
+                <t t-if="prefs.cbt_nav_mode === 'vertical' or prefs.cbt_nav_mode === 'compact'">
                     <div class="cbt-settings__row">
-                        <div class="cbt-settings__label" t-out="this.labels.sidebarStyle"/>
-                        <t t-call="dcs_backend_theme.ThemeSettings.Segmented" field="'cbt_sidebar_style'" label="this.labels.sidebarStyle"/>
+                        <div class="cbt-settings__label" t-esc="labels.sidebarStyle"/>
+                        <t t-call="dcs_backend_theme.ThemeSettings.Segmented">
+                            <t t-set="field" t-value="'cbt_sidebar_style'"/>
+                            <t t-set="label" t-value="labels.sidebarStyle"/>
+                        </t>
                     </div>
                     <div class="cbt-settings__row">
-                        <div class="cbt-settings__label" t-out="this.labels.sidebarPos"/>
-                        <t t-call="dcs_backend_theme.ThemeSettings.Segmented" field="'cbt_sidebar_position'" label="this.labels.sidebarPos"/>
+                        <div class="cbt-settings__label" t-esc="labels.sidebarPos"/>
+                        <t t-call="dcs_backend_theme.ThemeSettings.Segmented">
+                            <t t-set="field" t-value="'cbt_sidebar_position'"/>
+                            <t t-set="label" t-value="labels.sidebarPos"/>
+                        </t>
                     </div>
                 </t>
             </section>
 
             <section class="cbt-settings__group">
-                <h3 class="cbt-settings__title" t-out="this.labels.typography"/>
+                <h3 class="cbt-settings__title" t-esc="labels.typography"/>
                 <div class="cbt-settings__row">
-                    <div class="cbt-settings__label" t-out="this.labels.font"/>
-                    <div class="cbt-fonts" role="radiogroup" t-att-aria-label="this.labels.font">
-                        <t t-foreach="this.choices.cbt_font_family" t-as="choice" t-key="choice.value">
-                            <t t-set="inputId" t-value="this.uid + '_font_' + choice.value"/>
-                            <input type="radio" class="cbt-seg__input" t-att-id="inputId" t-att-name="this.uid + '_font'"
-                                   t-att-checked="this.prefs.cbt_font_family === choice.value"
+                    <div class="cbt-settings__label" t-esc="labels.font"/>
+                    <div class="cbt-fonts" role="radiogroup" t-att-aria-label="labels.font">
+                        <t t-foreach="choices.cbt_font_family" t-as="choice" t-key="choice.value">
+                            <t t-set="inputId" t-value="uid + '_font_' + choice.value"/>
+                            <input type="radio" class="cbt-seg__input" t-att-id="inputId" t-att-name="uid + '_font'"
+                                   t-att-checked="prefs.cbt_font_family === choice.value"
                                    t-on-change="() => this.set('cbt_font_family', choice.value)"/>
-                            <label class="cbt-font" t-att-for="inputId" t-attf-style="font-family: {{ this.fontStack(choice.value) }};">
+                            <label class="cbt-font" t-att-for="inputId" t-attf-style="font-family: {{ fontStack(choice.value) }};">
                                 <span class="cbt-font__sample">Aa</span>
-                                <span class="cbt-font__name" t-out="choice.label"/>
+                                <span class="cbt-font__name" t-esc="choice.label"/>
                             </label>
                         </t>
                     </div>
                 </div>
                 <div class="cbt-settings__row">
-                    <div class="cbt-settings__label" t-out="this.labels.fontSize"/>
-                    <t t-call="dcs_backend_theme.ThemeSettings.Segmented" field="'cbt_font_size'" label="this.labels.fontSize"/>
+                    <div class="cbt-settings__label" t-esc="labels.fontSize"/>
+                    <t t-call="dcs_backend_theme.ThemeSettings.Segmented">
+                        <t t-set="field" t-value="'cbt_font_size'"/>
+                        <t t-set="label" t-value="labels.fontSize"/>
+                    </t>
                 </div>
             </section>
 
             <section class="cbt-settings__group">
-                <h3 class="cbt-settings__title" t-out="this.labels.layout"/>
-                <t t-foreach="[['cbt_radius', this.labels.radius], ['cbt_density', this.labels.density], ['cbt_chatter_position', this.labels.chatter]]" t-as="row" t-key="row[0]">
+                <h3 class="cbt-settings__title" t-esc="labels.layout"/>
+                <t t-foreach="[['cbt_radius', labels.radius], ['cbt_density', labels.density], ['cbt_chatter_position', labels.chatter]]" t-as="row" t-key="row[0]">
                     <div class="cbt-settings__row">
-                        <div class="cbt-settings__label" t-out="row[1]"/>
-                        <t t-call="dcs_backend_theme.ThemeSettings.Segmented" field="row[0]" label="row[1]"/>
+                        <div class="cbt-settings__label" t-esc="row[1]"/>
+                        <t t-call="dcs_backend_theme.ThemeSettings.Segmented">
+                            <t t-set="field" t-value="row[0]"/>
+                            <t t-set="label" t-value="row[1]"/>
+                        </t>
                     </div>
                 </t>
                 <div class="cbt-settings__row">
                     <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" t-att-id="this.uid + '_split'"
-                               t-att-checked="this.prefs.cbt_split_view"
+                        <input class="form-check-input" type="checkbox" role="switch" t-att-id="uid + '_split'"
+                               t-att-checked="prefs.cbt_split_view"
                                t-on-change="(ev) => this.set('cbt_split_view', ev.target.checked)"/>
-                        <label class="form-check-label" t-att-for="this.uid + '_split'" t-out="this.labels.split"/>
+                        <label class="form-check-label" t-att-for="uid + '_split'" t-esc="labels.split"/>
                     </div>
-                    <p class="cbt-settings__help" t-out="this.labels.splitHelp"/>
+                    <p class="cbt-settings__help" t-esc="labels.splitHelp"/>
                 </div>
             </section>
 
             <section class="cbt-settings__group">
-                <h3 class="cbt-settings__title" t-out="this.labels.drawer"/>
-                <t t-foreach="[['cbt_drawer_style', this.labels.drawerStyle], ['cbt_icon_style', this.labels.iconStyle]]" t-as="row" t-key="row[0]">
+                <h3 class="cbt-settings__title" t-esc="labels.drawer"/>
+                <t t-foreach="[['cbt_drawer_style', labels.drawerStyle], ['cbt_icon_style', labels.iconStyle]]" t-as="row" t-key="row[0]">
                     <div class="cbt-settings__row">
-                        <div class="cbt-settings__label" t-out="row[1]"/>
-                        <t t-call="dcs_backend_theme.ThemeSettings.Segmented" field="row[0]" label="row[1]"/>
+                        <div class="cbt-settings__label" t-esc="row[1]"/>
+                        <t t-call="dcs_backend_theme.ThemeSettings.Segmented">
+                            <t t-set="field" t-value="row[0]"/>
+                            <t t-set="label" t-value="row[1]"/>
+                        </t>
                     </div>
                 </t>
             </section>
 
             <section class="cbt-settings__group">
-                <h3 class="cbt-settings__title" t-out="this.labels.motion"/>
+                <h3 class="cbt-settings__title" t-esc="labels.motion"/>
                 <div class="cbt-settings__row">
-                    <div class="cbt-settings__label" t-out="this.labels.animation"/>
-                    <t t-call="dcs_backend_theme.ThemeSettings.Segmented" field="'cbt_animation'" label="this.labels.animation"/>
-                    <p class="cbt-settings__help" t-out="this.labels.animationHelp"/>
+                    <div class="cbt-settings__label" t-esc="labels.animation"/>
+                    <t t-call="dcs_backend_theme.ThemeSettings.Segmented">
+                        <t t-set="field" t-value="'cbt_animation'"/>
+                        <t t-set="label" t-value="labels.animation"/>
+                    </t>
+                    <p class="cbt-settings__help" t-esc="labels.animationHelp"/>
                 </div>
             </section>
 
             <div class="cbt-settings__footer">
-                <button type="button" class="btn btn-link px-0" t-on-click="this.reset">
-                    <i class="oi me-1" data-icon="undo" aria-hidden="true"/><t t-out="this.labels.reset"/>
+                <button type="button" class="btn btn-link px-0" t-on-click="reset">
+                    <i class="fa fa-undo me-1" aria-hidden="true"/><t t-esc="labels.reset"/>
                 </button>
             </div>
         </div>

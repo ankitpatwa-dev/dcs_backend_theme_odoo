@@ -1,4 +1,4 @@
-import { Component, onWillStart, proxy } from "@odoo/owl";
+import { Component, onWillStart, useState } from "@odoo/owl";
 import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
 import { user } from "@web/core/user";
@@ -22,13 +22,14 @@ const MAX_UPLOAD = 4 * 1024 * 1024;
 /** Login page branding — administrators only (enforced server side too). */
 export class LoginSettings extends Component {
     static template = "dcs_backend_theme.LoginSettings";
+    static props = {};
 
     setup() {
         this.orm = useService("orm");
         this.notification = useService("notification");
         this.layouts = LOGIN_LAYOUTS;
         this.backgroundStyles = BACKGROUND_STYLES;
-        this.state = proxy({ values: null, saving: false, dirty: false, pendingImages: {} });
+        this.state = useState({ values: null, saving: false, dirty: false, pendingImages: {} });
         onWillStart(async () => {
             this.state.values = await this.orm.call("cbt.theme.config", "get_login_settings", []);
         });
@@ -139,6 +140,7 @@ export class LoginSettings extends Component {
 export class ThemeSettingsAction extends Component {
     static template = "dcs_backend_theme.ThemeSettingsAction";
     static components = { ThemeSettings, LoginSettings };
+    static props = ["*"];
 
     setup() {
         this.isSystem = user.isSystem;

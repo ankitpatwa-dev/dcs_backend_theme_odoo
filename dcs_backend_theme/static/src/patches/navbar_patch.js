@@ -1,5 +1,4 @@
-import { proxy } from "@odoo/owl";
-import { useLayoutEffect } from "@web/owl2/utils";
+import { useEffect, useState } from "@odoo/owl";
 import { _t } from "@web/core/l10n/translation";
 import { useService } from "@web/core/utils/hooks";
 import { patch } from "@web/core/utils/patch";
@@ -14,11 +13,11 @@ patch(NavBar.prototype, {
     setup() {
         super.setup(...arguments);
         this.cbtTheme = useService("cbt_theme");
-        this.cbtPrefs = proxy(this.cbtTheme.prefs);
-        this.cbtUi = proxy(this.cbtTheme.ui);
+        this.cbtPrefs = useState(this.cbtTheme.prefs);
+        this.cbtUi = useState(this.cbtTheme.ui);
         // Section visibility depends on the navigation mode: re-run Odoo's
         // overflow computation ("more" menu) whenever it changes.
-        useLayoutEffect(
+        useEffect(
             () => {
                 this.adapt();
             },

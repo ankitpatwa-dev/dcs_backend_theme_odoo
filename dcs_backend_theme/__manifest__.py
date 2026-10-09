@@ -2,18 +2,18 @@
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0).
 {
     "name": "DevsCodespace Backend Theme",
-    "summary": "Modern, responsive backend theme for Odoo 20 Community: sidebar, app drawer, "
+    "summary": "Modern, responsive backend theme for Odoo 19 Community: sidebar, app drawer, "
                "global search, bookmarks, dark mode, color palettes, split view, "
                "chatter position and login page layouts.",
     "description": """
 DevsCodespace Backend Theme
 ===========================
-A modern, configurable backend theme for Odoo 20 Community, built with OWL 3,
+A modern, configurable backend theme for Odoo 19 Community, built with OWL,
 services, registries and isolated patches. Per-user preferences are stored on
 ``res.users.settings`` and shipped with the session, so the theme costs no
 extra RPC at start-up.
 """,
-    "version": "20.0.1.0.0",
+    "version": "19.0.1.0.2",
     "category": "Themes/Backend",
     "author": "Ankit",
     "maintainer": "DevsCodespace",
@@ -77,7 +77,7 @@ extra RPC at start-up.
         "web.assets_frontend": [
             "dcs_backend_theme/static/src/login/login.scss",
         ],
-        # Hoot unit tests (Odoo 20 test runner)
+        # Hoot unit tests (Odoo 19 test runner)
         "web.assets_unit_tests": [
             "dcs_backend_theme/static/tests/**/*",
             ("remove", "dcs_backend_theme/static/tests/tours/**/*"),

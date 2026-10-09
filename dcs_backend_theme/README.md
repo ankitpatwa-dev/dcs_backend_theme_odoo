@@ -1,14 +1,14 @@
 # DevsCodespace Backend Theme (`dcs_backend_theme`)
 
 **Author:** Ankit · **Maintainer:** [DevsCodespace](https://devscodespace.com) ·
-**License:** LGPL-3 · **Odoo:** 20.0 Community
+**License:** LGPL-3 · **Odoo:** 19.0 Community
 
 ![DevsCodespace Backend Theme](static/description/banner.png)
 
-A configurable backend theme for **Odoo 20 Community**. It covers the same
+A configurable backend theme for **Odoo 19 Community**. It covers the same
 feature areas as premium backend themes (sidebar, app drawer, dark mode, split
 view, login layouts and more) with its own visual identity and an
-implementation built on the Odoo 20 web client: OWL 3 components, services,
+implementation built on the Odoo 19 web client: OWL components, services,
 registries, small isolated `patch()` calls, and SCSS compiled into Odoo's own
 light and dark bundles.
 
@@ -51,7 +51,7 @@ light and dark bundles.
 
 ## Feature tour
 
-Screenshots taken on Odoo 20.0 Community with demo data.
+Screenshots taken on Odoo 19.0 Community with demo data.
 
 ### Navigation: Four navigation modes, one click apart
 
@@ -298,7 +298,7 @@ dcs_backend_theme/
   fullscreen mode keep working unchanged.
 * **Runtime vs compile time.** Things users change often (primary color,
   radius, density, font, motion) are CSS custom properties, so there is no
-  reload. Light and dark are two compiled bundles, which is how Odoo 20
+  reload. Light and dark are two compiled bundles, which is how Odoo 19
   Community itself does dark mode: `ir.http.color_scheme()` picks
   `web.assets_web_dark` when it returns `"dark"`. The theme also writes
   Odoo's `color_scheme` cookie, which Odoo reads for lazy bundles and chart
@@ -368,8 +368,8 @@ The tour only uses apps available with the module's own dependencies
 (Settings, Users), so the suite runs on a bare database. Browser tests need
 Chromium and the `websocket-client` Python package.
 
-**Results on Odoo 20.0 Community (branch `20.0`, commit `01d3c8a`, October 2026):**
-18/18 Python tests (including the tour) and 20/20 Hoot tests pass on a fresh
+**Results on Odoo 19.0 Community (commit `82027c3`, October 2026):** 18/18
+Python tests (including the tour) and 20/20 Hoot tests pass on a fresh
 database.
 
 **Verified in a browser** with demo data for Sales, CRM, Inventory,
@@ -383,40 +383,22 @@ stock backend loading normally afterwards; reinstalling works.
 
 ---
 
-## Odoo 20 compatibility notes
+## Odoo 19 compatibility notes
 
-This is the **20.0** branch of the module. Odoo 20 moved the web client to
-**OWL 3**, so the 20.0 code differs from 19.0 in these places:
-
-* **Components and templates.** No `static props`; props are declared with
-  `props = useProps({...})` and `t` types. State uses `proxy()` / signals
-  instead of `useState` / `reactive`; refs are `signal.ref()` with
-  `t-ref="this.rootRef"`. Templates reference component members as
-  `this.x`, use `t-out` / `t-call-slot`, pass `t-call` parameters as
-  attributes, and inputs bind values explicitly (OWL 3 `t-model` needs
-  signals). `useLayoutEffect` / `useSubEnv` / `render` come from
-  `@web/owl2/utils`.
-* **Icons.** Font Awesome is no longer shipped; all icons use Odoo's icon
-  system (`<i class="oi" data-icon="search"/>`, Material Symbols subset).
-  App font icons (`web_icon` "name,color,background") render the same way.
-* **UI size.** `SIZES` comes from `@web/core/ui/ui_utils`.
-* **Server.** `ir.config_parameter` uses the typed API (`get_str` /
-  `set_str`); `web.login_layout` passes `body_classname` as a `t-call`
-  attribute.
-* **Dark mode.** Odoo 20 dashboard cards (Sales) get dark tints through
-  their `--DashboardCard__*` variables.
-* Unchanged: `web.NavBar.AppsMenu`, `menu` / `action` services,
-  `user.settings` / `set_res_users_settings`, `ir.http.color_scheme()`, the
-  `web.assets_web_dark` bundles and mail `FormRenderer.mailLayout()`.
-* **Odoo's own NavBar unit tests** expect the default apps dropdown, which
-  this theme replaces with the drawer launcher; run Odoo's core suites on a
-  database without the theme.
+* Targets the 19.0 web client: `web.NavBar.AppsMenu` template, the
+  `WebClient` env, `menu` and `action` services, `user.settings` /
+  `set_res_users_settings`, `ir.http.color_scheme()`, the
+  `web.assets_web_dark` and `web.assets_backend_lazy_dark` bundles, and the
+  mail `FormRenderer.mailLayout()` layout names (`SIDE_CHATTER`, `COMBO`, …).
+* Server templates use `t-out` (`t-esc` is deprecated in 19.0 QWeb).
+* Hoot (not QUnit) is used for unit tests, as in Odoo 19.
+* **Odoo's own NavBar unit tests** expect the default apps dropdown
+  (`.o_navbar_apps_menu .dropdown-toggle`), which this theme deliberately
+  replaces with the drawer launcher. As with any theme that changes the
+  navbar, run Odoo's core test suites on a database without the theme.
 
 ## Upgrade / migration notes
 
-* **From the 19.0 version.** Data is compatible: the same `cbt_*` fields and
-  `dcs_backend_theme.*` parameters are used, so a migrated database keeps
-  every user preference, bookmark and the login page setup.
 * **From 18.0 themes.** The field names (`cbt_*` on `res.users.settings`) are
   new, so nothing collides with other themes. Uninstall any other backend
   theme first: two themes patching the navbar will conflict.

@@ -1,4 +1,4 @@
-import { Component, proxy, t, useProps } from "@odoo/owl";
+import { Component, useState } from "@odoo/owl";
 import { _t } from "@web/core/l10n/translation";
 import { useService } from "@web/core/utils/hooks";
 import { CHOICES, PALETTES } from "../../core/constants";
@@ -13,17 +13,17 @@ let nextId = 0;
  */
 export class ThemeSettings extends Component {
     static template = "dcs_backend_theme.ThemeSettings";
-    props = useProps({
-        compact: t.boolean().optional(false),
-    });
+    static props = {
+        compact: { type: Boolean, optional: true },
+    };
 
     setup() {
         this.themeService = useService("cbt_theme");
-        this.prefs = proxy(this.themeService.prefs);
+        this.prefs = useState(this.themeService.prefs);
         this.uid = `cbt_ts_${nextId++}`;
         this.choices = CHOICES;
         this.palettes = PALETTES;
-        this.state = proxy({ hex: this.prefs.cbt_primary_color });
+        this.state = useState({ hex: this.prefs.cbt_primary_color });
     }
 
     set(key, value) {

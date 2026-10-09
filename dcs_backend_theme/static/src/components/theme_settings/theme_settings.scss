@@ -179,15 +179,8 @@
 .cbt-seg__input:checked + .cbt-font { border-color: var(--cbt-primary); box-shadow: 0 0 0 1px var(--cbt-primary); }
 
 // Full-page client action
-// Odoo sets `html .o_web_client > .o_action_manager > .o_action
-// { overflow: hidden }` (client actions are expected to scroll an inner
-// element), so this page must out-rank that selector to become its own
-// scroll container.
-.cbt-settings-page,
-html .o_web_client > .o_action_manager > .o_action.cbt-settings-page {
-    display: block;
-    overflow-x: hidden;
-    overflow-y: auto;
+.cbt-settings-page {
+    overflow: auto;
     background: var(--cbt-bg);
 }
 .cbt-settings-page__inner { inline-size: #{"min(76rem, 100%)"}; margin-inline: auto; padding: 2rem 1.25rem 3rem; }

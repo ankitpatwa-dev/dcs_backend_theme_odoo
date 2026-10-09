@@ -2,29 +2,29 @@
 <templates xml:space="preserve">
     <t t-name="dcs_backend_theme.SearchSystray">
         <div class="o-dropdown cbt-systray-item">
-            <button type="button" class="cbt-systray-btn cbt-systray-search" t-on-click="this.open"
-                    t-att-title="this.label + ' (' + this.shortcut + ')'" aria-haspopup="dialog" t-att-aria-label="this.label">
-                <i class="oi" data-icon="search" aria-hidden="true"/>
-                <span class="cbt-systray-search__label" t-out="this.label"/>
-                <span class="cbt-kbd" t-out="this.shortcut"/>
+            <button type="button" class="cbt-systray-btn cbt-systray-search" t-on-click="open"
+                    t-att-title="label + ' (' + shortcut + ')'" aria-haspopup="dialog" t-att-aria-label="label">
+                <i class="fa fa-search" aria-hidden="true"/>
+                <span class="cbt-systray-search__label" t-esc="label"/>
+                <span class="cbt-kbd" t-esc="shortcut"/>
             </button>
         </div>
     </t>
 
     <t t-name="dcs_backend_theme.BookmarksSystray">
         <div class="o-dropdown cbt-systray-item">
-            <button type="button" class="cbt-systray-btn" t-on-click="this.open" t-att-title="this.label" t-att-aria-label="this.label"
-                    aria-haspopup="dialog" t-att-aria-expanded="this.themeUi.panel === 'bookmarks' ? 'true' : 'false'">
-                <i class="oi" data-icon="bookmark" aria-hidden="true"/>
+            <button type="button" class="cbt-systray-btn" t-on-click="open" t-att-title="label" t-att-aria-label="label"
+                    aria-haspopup="dialog" t-att-aria-expanded="themeUi.panel === 'bookmarks' ? 'true' : 'false'">
+                <i class="fa fa-bookmark-o" aria-hidden="true"/>
             </button>
         </div>
     </t>
 
     <t t-name="dcs_backend_theme.ThemeSettingsSystray">
         <div class="o-dropdown cbt-systray-item">
-            <button type="button" class="cbt-systray-btn" t-on-click="this.open" t-att-title="this.label" t-att-aria-label="this.label"
-                    aria-haspopup="dialog" t-att-aria-expanded="this.themeUi.panel === 'settings' ? 'true' : 'false'">
-                <i class="oi" data-icon="tune" aria-hidden="true"/>
+            <button type="button" class="cbt-systray-btn" t-on-click="open" t-att-title="label" t-att-aria-label="label"
+                    aria-haspopup="dialog" t-att-aria-expanded="themeUi.panel === 'settings' ? 'true' : 'false'">
+                <i class="fa fa-sliders" aria-hidden="true"/>
             </button>
         </div>
     </t>
