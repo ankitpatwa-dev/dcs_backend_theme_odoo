@@ -47,7 +47,7 @@ class CbtThemeConfig(models.AbstractModel):
     @api.model
     def _get_raw_login_settings(self):
         icp = self.env["ir.config_parameter"].sudo()
-        return {key: icp.get_str(PREFIX + key, default) for key, default in LOGIN_DEFAULTS.items()}
+        return {key: icp.get_param(PREFIX + key, default) for key, default in LOGIN_DEFAULTS.items()}
 
     @api.model
     def get_login_values(self):
@@ -115,19 +115,19 @@ class CbtThemeConfig(models.AbstractModel):
                 value = "1" if value else "0"
             if key in TEXT_LIMITS:
                 value = (value or "")[: TEXT_LIMITS[key]]
-            icp.set_str(PREFIX + key, value)
+            icp.set_param(PREFIX + key, value)
         return self.get_login_settings()
 
     @api.model
     def _set_image(self, kind, payload):
         icp = self.env["ir.config_parameter"].sudo()
         param = PREFIX + f"{kind}_attachment_id"
-        old_id = icp.get_str(param)
+        old_id = icp.get_param(param)
         Attachment = self.env["ir.attachment"].sudo()
         if old_id and old_id.isdigit():
             Attachment.browse(int(old_id)).exists().unlink()
         if not payload:
-            icp.set_str(param, "")
+            icp.set_param(param, "")
             return
         mimetype = payload.get("mimetype")
         if mimetype not in IMAGE_MIMETYPES:
@@ -146,7 +146,7 @@ class CbtThemeConfig(models.AbstractModel):
             "res_model": self._name,
             "res_id": 0,
         })
-        icp.set_str(param, str(attachment.id))
+        icp.set_param(param, str(attachment.id))
 
     @api.model
     def _check_admin(self):

@@ -1,4 +1,4 @@
-import { Component, t, useProps } from "@odoo/owl";
+import { Component } from "@odoo/owl";
 
 /**
  * Renders an application icon from the menu payload:
@@ -7,34 +7,22 @@ import { Component, t, useProps } from "@odoo/owl";
  */
 export class AppIcon extends Component {
     static template = "dcs_backend_theme.AppIcon";
-    props = useProps({
-        app: t.object(),
-        size: t.string().optional("md"), // "sm" | "md" | "lg"
-    });
+    static props = {
+        app: Object,
+        size: { type: String, optional: true }, // "sm" | "md" | "lg"
+    };
+    static defaultProps = { size: "md" };
 
-    /**
-     * Odoo 20 font icons: web_icon "icon,color,background" where `icon` is a
-     * Material Symbols / odoo_ui_icons name rendered with
-     * `<i class="oi" data-icon="...">`. Legacy "fa-*" names (Font Awesome is
-     * no longer shipped) fall back to a colored initial.
-     */
     get fontIcon() {
         const { webIcon, webIconData } = this.props.app;
         if (webIconData || !webIcon) {
             return null;
         }
-        const parts = typeof webIcon === "string"
-            ? webIcon.split(",")
-            : [webIcon.icon, webIcon.color, webIcon.backgroundColor];
-        const [name, color, background] = parts;
-        if (!name) {
+        const [iconClass, color, background] = webIcon.split(",");
+        if (!iconClass || !iconClass.startsWith("fa")) {
             return null;
         }
-        return {
-            name: name.startsWith("fa") ? null : name.trim(),
-            color: color || "#fff",
-            background: background || "var(--cbt-primary)",
-        };
+        return { iconClass, color: color || "#fff", background: background || "var(--cbt-primary)" };
     }
 
     get imageSrc() {

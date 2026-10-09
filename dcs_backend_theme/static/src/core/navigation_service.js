@@ -1,4 +1,4 @@
-import { proxy } from "@odoo/owl";
+import { reactive } from "@odoo/owl";
 import { browser } from "@web/core/browser/browser";
 import { router } from "@web/core/browser/router";
 import { _t } from "@web/core/l10n/translation";
@@ -40,7 +40,7 @@ function newBookmarkId() {
 export const navigationService = {
     dependencies: ["menu", "action", "cbt_theme"],
     start(env, { menu, action, cbt_theme: theme }) {
-        const state = proxy({
+        const state = reactive({
             recentMenuIds: readList(RECENT_STORAGE_KEY).filter((id) => Number.isInteger(id)),
             recentSearches: readList(SEARCH_HISTORY_KEY).filter((q) => typeof q === "string"),
             currentMenuId: null,

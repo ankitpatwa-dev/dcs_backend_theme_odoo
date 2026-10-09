@@ -1,4 +1,4 @@
-import { Component, proxy } from "@odoo/owl";
+import { Component, useState } from "@odoo/owl";
 import { _t } from "@web/core/l10n/translation";
 import { useService } from "@web/core/utils/hooks";
 import { AppIcon } from "../app_icon/app_icon";
@@ -12,14 +12,15 @@ import { usePanel } from "../../core/use_panel";
 export class GlobalSearch extends Component {
     static template = "dcs_backend_theme.GlobalSearch";
     static components = { AppIcon };
+    static props = {};
 
     setup() {
         this.themeService = useService("cbt_theme");
         this.nav = useService("cbt_nav");
         this.command = useService("command");
-        this.navState = proxy(this.nav.state);
-        this.data = proxy(this.themeService.data);
-        this.state = proxy({ query: "", activeIndex: 0 });
+        this.navState = useState(this.nav.state);
+        this.data = useState(this.themeService.data);
+        this.state = useState({ query: "", activeIndex: 0 });
         this.rootRef = usePanel("root", () => this.close());
         this.listId = `cbt_search_list_${GlobalSearch.nextId++}`;
     }
@@ -113,8 +114,7 @@ export class GlobalSearch extends Component {
         this.themeService.closePanel("search");
     }
 
-    onInput(ev) {
-        this.state.query = ev.target.value;
+    onInput() {
         this.state.activeIndex = 0;
     }
 
@@ -149,7 +149,7 @@ export class GlobalSearch extends Component {
     }
 
     scrollActive() {
-        const el = this.rootRef()?.querySelector(`#${this.optionId(this.state.activeIndex)}`);
+        const el = this.rootRef.el?.querySelector(`#${this.optionId(this.state.activeIndex)}`);
         el?.scrollIntoView({ block: "nearest" });
     }
 

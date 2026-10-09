@@ -1,13 +1,14 @@
-import { Component, proxy } from "@odoo/owl";
+import { Component, useState } from "@odoo/owl";
 import { isMacOS } from "@web/core/browser/feature_detection";
 import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 
 class ThemeSystrayButton extends Component {
+    static props = {};
     setup() {
         this.themeService = useService("cbt_theme");
-        this.themeUi = proxy(this.themeService.ui);
+        this.themeUi = useState(this.themeService.ui);
     }
 }
 

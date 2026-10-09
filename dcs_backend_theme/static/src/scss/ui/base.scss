@@ -289,7 +289,7 @@
 }
 
 // Respect the user's animation level everywhere (spinners stay functional).
-:root[data-cbt-animation="none"] *:not(.oi-spin):not(.spinner-border):not(.spinner-grow),
+:root[data-cbt-animation="none"] *:not(.fa-spin):not(.fa-pulse):not(.spinner-border):not(.spinner-grow),
 :root[data-cbt-animation="none"] *::before,
 :root[data-cbt-animation="none"] *::after {
     animation-duration: 0ms !important;

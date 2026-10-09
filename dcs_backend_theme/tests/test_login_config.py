@@ -83,8 +83,8 @@ class TestLoginPage(HttpCase):
     def test_login_page_renders_each_layout(self):
         icp = self.env["ir.config_parameter"].sudo()
         for layout in ("minimal", "corporate", "split", "illustration"):
-            icp.set_str("dcs_backend_theme.login_layout", layout)
-            icp.set_str("dcs_backend_theme.login_title", "Welcome <b>team</b>")
+            icp.set_param("dcs_backend_theme.login_layout", layout)
+            icp.set_param("dcs_backend_theme.login_title", "Welcome <b>team</b>")
             response = self.url_open("/web/login")
             self.assertEqual(response.status_code, 200)
             self.assertIn(f"cbt-login--{layout}", response.text)

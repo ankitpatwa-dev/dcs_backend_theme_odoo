@@ -121,4 +121,6 @@ class TestColorScheme(TransactionCase):
 
     def test_portal_users_are_untouched(self):
         portal = new_test_user(self.env, login="cbt_portal", groups="base.group_portal")
-        self.assertEqual(self._scheme(portal, cookie="dark"), "light")
+        # Odoo 18's own behavior (the color_scheme cookie) is kept for them.
+        self.assertEqual(self._scheme(portal), "light")
+        self.assertEqual(self._scheme(portal, cookie="dark"), "dark")

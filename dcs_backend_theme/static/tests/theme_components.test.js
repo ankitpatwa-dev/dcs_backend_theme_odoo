@@ -6,7 +6,7 @@ import {
     contains,
     defineMenus,
     getService,
-    makeTestApp,
+    makeMockEnv,
     mountWithCleanup,
 } from "@web/../tests/web_test_helpers";
 
@@ -53,7 +53,7 @@ test("sidebar lists apps and filters menus", async () => {
 
 test("sidebar mini mode hides labels and exposes tooltips", async () => {
     defineTestMenus();
-    await makeTestApp();
+    await makeMockEnv();
     await getService("cbt_theme").setPrefs({ cbt_sidebar_mode: "mini" });
     await mountWithCleanup(Sidebar);
     expect(".cbt-sidebar.cbt-sidebar--mini").toHaveCount(1);
@@ -63,7 +63,7 @@ test("sidebar mini mode hides labels and exposes tooltips", async () => {
 
 test("sidebar is hidden in horizontal navigation", async () => {
     defineTestMenus();
-    await makeTestApp();
+    await makeMockEnv();
     await getService("cbt_theme").setPrefs({ cbt_nav_mode: "horizontal" });
     await mountWithCleanup(Sidebar);
     expect(".cbt-sidebar").toHaveCount(0);
@@ -71,7 +71,7 @@ test("sidebar is hidden in horizontal navigation", async () => {
 
 test("app drawer searches apps and toggles favorites", async () => {
     defineTestMenus();
-    await makeTestApp();
+    await makeMockEnv();
     getService("cbt_theme").openPanel("drawer");
     await mountWithCleanup(AppDrawer);
     expect(queryAllTexts(".cbt-drawer__tile-name")).toEqual(["CRM", "Inventory"]);
@@ -88,7 +88,7 @@ test("app drawer searches apps and toggles favorites", async () => {
 
 test("app drawer categories layout groups apps", async () => {
     defineTestMenus();
-    await makeTestApp();
+    await makeMockEnv();
     await getService("cbt_theme").setPrefs({ cbt_drawer_style: "categories" });
     await mountWithCleanup(AppDrawer);
     // headings are uppercased by CSS: compare the DOM text
@@ -100,7 +100,7 @@ test("app drawer categories layout groups apps", async () => {
 
 test("app drawer closes on Escape", async () => {
     defineTestMenus();
-    await makeTestApp();
+    await makeMockEnv();
     const theme = getService("cbt_theme");
     theme.openPanel("drawer");
     await mountWithCleanup(AppDrawer);

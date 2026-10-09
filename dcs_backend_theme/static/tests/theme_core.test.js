@@ -1,7 +1,7 @@
 import { describe, expect, test } from "@odoo/hoot";
 import { animationFrame } from "@odoo/hoot-mock";
 import { defineMailModels } from "@mail/../tests/mail_test_helpers";
-import { defineMenus, getService, makeTestApp } from "@web/../tests/web_test_helpers";
+import { defineMenus, getService, makeMockEnv } from "@web/../tests/web_test_helpers";
 
 import { contrastRatio, hexToRgb, isHexColor, onColor } from "@dcs_backend_theme/core/color_utils";
 import { PREF_DEFAULTS, getAppCategory } from "@dcs_backend_theme/core/constants";
@@ -70,7 +70,7 @@ describe("preferences", () => {
 
 describe("services", () => {
     test("theme service applies changes live and manages panels/favorites", async () => {
-        await makeTestApp();
+        await makeMockEnv();
         const theme = getService("cbt_theme");
         expect(theme.prefs.cbt_theme_mode).toBe("light");
 
@@ -119,7 +119,7 @@ describe("services", () => {
             ],
             { mode: "replace" }
         );
-        await makeTestApp();
+        await makeMockEnv();
         const nav = getService("cbt_nav");
         const index = nav.getIndex();
         expect(index.map((e) => e.name)).toEqual(["Sales", "Orders", "Pricelists"]);
@@ -134,7 +134,7 @@ describe("services", () => {
     });
 
     test("bookmarks can be renamed, reordered and removed", async () => {
-        await makeTestApp();
+        await makeMockEnv();
         const theme = getService("cbt_theme");
         const nav = getService("cbt_nav");
         theme.setBookmarks([
@@ -155,7 +155,7 @@ describe("services", () => {
     });
 
     test("search history keeps recent unique queries", async () => {
-        await makeTestApp();
+        await makeMockEnv();
         const nav = getService("cbt_nav");
         nav.clearSearchHistory();
         nav.pushSearch("invoice");

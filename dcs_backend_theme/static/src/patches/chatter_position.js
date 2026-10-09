@@ -1,5 +1,5 @@
-import { proxy } from "@odoo/owl";
-import { SIZES } from "@web/core/ui/ui_utils";
+import { useState } from "@odoo/owl";
+import { SIZES } from "@web/core/ui/ui_service";
 import { useService } from "@web/core/utils/hooks";
 import { patch } from "@web/core/utils/patch";
 import { FormController } from "@web/views/form/form_controller";
@@ -44,7 +44,7 @@ function availableWidth() {
 patch(FormRenderer.prototype, {
     setup() {
         super.setup(...arguments);
-        this.cbtPrefs = proxy(useService("cbt_theme").prefs);
+        this.cbtPrefs = useState(useService("cbt_theme").prefs);
     },
     mailLayout(hasAttachmentContainer) {
         const layout = super.mailLayout(hasAttachmentContainer);
@@ -82,7 +82,7 @@ patch(FormRenderer.prototype, {
 patch(FormController.prototype, {
     setup() {
         super.setup(...arguments);
-        this.cbtPrefs = proxy(useService("cbt_theme").prefs);
+        this.cbtPrefs = useState(useService("cbt_theme").prefs);
     },
     get className() {
         const result = super.className;

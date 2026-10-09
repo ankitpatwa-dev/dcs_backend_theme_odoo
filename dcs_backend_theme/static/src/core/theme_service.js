@@ -1,4 +1,4 @@
-import { proxy } from "@odoo/owl";
+import { reactive } from "@odoo/owl";
 import { browser } from "@web/core/browser/browser";
 import { cookie } from "@web/core/browser/cookie";
 import { rpc } from "@web/core/network/rpc";
@@ -77,13 +77,13 @@ export function removeAppliedPrefs(root = document.documentElement) {
 export const themeService = {
     start(env) {
         const settings = user.settings || {};
-        const prefs = proxy(readPrefs(settings));
-        const data = proxy({
+        const prefs = reactive(readPrefs(settings));
+        const data = reactive({
             favoriteApps: Array.isArray(settings.cbt_favorite_apps) ? [...settings.cbt_favorite_apps] : [],
             bookmarks: Array.isArray(settings.cbt_bookmarks) ? [...settings.cbt_bookmarks] : [],
         });
         // Transient UI state shared by the theme components.
-        const ui = proxy({
+        const ui = reactive({
             panel: null, // "drawer" | "search" | "bookmarks" | "settings" | null
             sidebarPeek: false, // collapsed/mini sidebar temporarily expanded
             fullscreen: false,
@@ -107,7 +107,8 @@ export const themeService = {
                 kwargs: { new_settings: values, context: user.context },
             }).then(() => {
                 for (const [key, value] of Object.entries(values)) {
-                    user.updateUserSettings(key, value);
+                    // Odoo 19+ only; Odoo 18 has no local settings cache to update.
+                    user.updateUserSettings?.(key, value);
                 }
             });
             return saving;

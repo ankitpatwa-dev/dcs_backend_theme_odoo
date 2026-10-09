@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Odoo 18 chooses the dark bundle from the color_scheme cookie only.
+        Use ir.http.color_scheme() (models/ir_http.py) instead, so a user's
+        saved theme mode applies on the first page load.
+    -->
+    <template id="webclient_bootstrap_color_scheme" inherit_id="web.webclient_bootstrap"
+              name="DevsCodespace Backend Theme: color scheme">
+        <xpath expr="//t[@t-if=&quot;request.cookies.get('color_scheme') == 'dark'&quot;]" position="attributes">
+            <attribute name="t-if">request.env['ir.http'].color_scheme() == 'dark'</attribute>
+        </xpath>
+    </template>
+</odoo>

@@ -37,15 +37,15 @@ export const PALETTES = [
 
 export const CHOICES = {
     cbt_theme_mode: [
-        { value: "light", label: _t("Light"), icon: "light_mode" },
-        { value: "dark", label: _t("Dark"), icon: "dark_mode" },
-        { value: "system", label: _t("System"), icon: "desktop_windows" },
+        { value: "light", label: _t("Light"), icon: "fa-sun-o" },
+        { value: "dark", label: _t("Dark"), icon: "fa-moon-o" },
+        { value: "system", label: _t("System"), icon: "fa-desktop" },
     ],
     cbt_nav_mode: [
-        { value: "vertical", label: _t("Sidebar"), icon: "left_panel_open" },
-        { value: "horizontal", label: _t("Top bar"), icon: "toolbar" },
-        { value: "compact", label: _t("Compact"), icon: "more_vert" },
-        { value: "drawer", label: _t("App drawer"), icon: "apps" },
+        { value: "vertical", label: _t("Sidebar"), icon: "fa-columns" },
+        { value: "horizontal", label: _t("Top bar"), icon: "fa-window-maximize" },
+        { value: "compact", label: _t("Compact"), icon: "fa-ellipsis-v" },
+        { value: "drawer", label: _t("App drawer"), icon: "fa-th" },
     ],
     cbt_sidebar_mode: [
         { value: "expanded", label: _t("Expanded") },

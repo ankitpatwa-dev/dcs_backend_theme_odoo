@@ -7,9 +7,8 @@
         selection keep working.
     -->
     <template id="login_layout" inherit_id="web.login_layout" name="DevsCodespace Backend Theme: Login Layout">
-        <!-- Odoo 20 passes body_classname as a (formatted) t-call attribute -->
-        <xpath expr="//t[@t-call='web.frontend_layout']" position="attributes">
-            <attribute name="body_classname.f">cbt-login-body</attribute>
+        <xpath expr="//t[@t-set='body_classname']" position="attributes">
+            <attribute name="t-value">'cbt-login-body'</attribute>
         </xpath>
         <xpath expr="//div[hasclass('container')][hasclass('py-5')]" position="replace">
             <t t-set="cbt" t-value="request.env['cbt.theme.config'].sudo().get_login_values() if request and request.db else {}"/>

@@ -30,14 +30,14 @@ registry.category("web_tour.tours").add("dcs_backend_theme_tour", {
         { trigger: ".o_list_view .o_data_row" },
 
         // Bookmark the current view (stored on res.users.settings)
-        { trigger: ".cbt-systray-btn [data-icon=bookmark]", run: "click" },
+        { trigger: ".cbt-systray-btn .fa-bookmark-o", run: "click" },
         { trigger: ".cbt-sheet__toolbar .btn-primary", run: "click" },
         { trigger: ".cbt-bookmark__label:contains(Users)" },
         { trigger: ".cbt-sheet__header .cbt-icon-btn", run: "click" },
         { trigger: "body:not(:has(.cbt-sheet))" },
 
         // Theme settings: change density live
-        { trigger: ".cbt-systray-btn [data-icon=tune]", run: "click" },
+        { trigger: ".cbt-systray-btn .fa-sliders", run: "click" },
         { trigger: ".cbt-sheet--settings .cbt-seg__option:contains(Compact)", run: "click" },
         { trigger: "html[data-cbt-density='compact']" },
         { trigger: ".cbt-sheet--settings .cbt-seg__option:contains(Comfortable)", run: "click" },
